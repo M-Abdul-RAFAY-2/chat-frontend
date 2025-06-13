@@ -7,6 +7,8 @@ import {
   Loader2,
   Plus,
   MoreVertical,
+  AlertCircle,
+  RefreshCw,
 } from "lucide-react";
 import { useChatData, Conversation } from "../hooks/useChatData";
 
@@ -28,7 +30,7 @@ const ConversationsList = ({
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("newest");
   const [sortOpen, setSortOpen] = useState(false);
-  const { conversations, loading, markAsRead } = useChatData();
+  const { conversations, loading, error, markAsRead, refreshConversations } = useChatData();
 
   // Filter conversations based on active filter from sidebar
   const getFilteredConversations = () => {
@@ -38,10 +40,10 @@ const ConversationsList = ({
     switch (activeFilter) {
       case "assigned":
         // In a real app, this would filter by assigned conversations
-        filtered = conversations.filter((conv) => conv.id % 2 === 0);
+        filtered = conversations.filter((conv) => conv.id.length % 2 === 0);
         break;
       case "unassigned":
-        filtered = conversations.filter((conv) => conv.id % 2 === 1);
+        filtered = conversations.filter((conv) => conv.id.length % 2 === 1);
         break;
       case "new-lead":
         filtered = conversations.filter((conv) => conv.status === "NEW LEAD");
@@ -105,14 +107,17 @@ const ConversationsList = ({
   };
 
   const getAvatarColor = (name?: string) => {
-    if (!name || typeof name !== "string" || name.length === 0) return "#ccc";
-    // Example color logic:
+    if (!name || typeof name !== "string" || name.length === 0) return "bg-gray-500";
+    // Generate consistent color based on name
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
       hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
-    const color = `hsl(${hash % 360}, 70%, 60%)`;
-    return color;
+    const colors = [
+      "bg-blue-500", "bg-green-500", "bg-purple-500", "bg-pink-500", 
+      "bg-indigo-500", "bg-red-500", "bg-yellow-500", "bg-teal-500"
+    ];
+    return colors[Math.abs(hash) % colors.length];
   };
 
   const handleConversationClick = (conversation: Conversation) => {
@@ -166,6 +171,10 @@ const ConversationsList = ({
     }
   }, [filterOpen, sortOpen]);
 
+  const handleRefresh = async () => {
+    await refreshConversations();
+  };
+
   if (loading) {
     return (
       <div className="w-full lg:w-80 bg-white border-r border-gray-200 h-full flex items-center justify-center">
@@ -180,22 +189,8 @@ const ConversationsList = ({
   return (
     <div className="w-full lg:w-80 bg-white border-r border-gray-200 h-full flex flex-col">
       <div className="p-4 border-b border-gray-200 flex-shrink-0 bg-gray-50">
-        {/* Mobile header */}
-        {/* <div className="flex items-center justify-between mb-4 lg:hidden">
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <h2 className="text-lg font-semibold text-gray-900">Conversations</h2>
-          <button className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <Plus size={20} />
-          </button>
-        </div> */}
-
-        {/* Desktop header */}
-        {/* <div className="hidden lg:flex items-center justify-between mb-4">
+        {/* Header with refresh button */}
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
               {getFilterTitle()}
@@ -204,10 +199,24 @@ const ConversationsList = ({
               {filteredConversations.length} conversation{filteredConversations.length !== 1 ? 's' : ''}
             </p>
           </div>
-          <button className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <MoreVertical size={18} />
+          <button
+            onClick={handleRefresh}
+            className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            title="Refresh conversations"
+          >
+            <RefreshCw size={18} />
           </button>
-        </div> */}
+        </div>
+
+        {/* Error Banner */}
+        {error && (
+          <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3">
+            <div className="flex items-center space-x-2 text-red-700">
+              <AlertCircle size={16} />
+              <span className="text-sm">{error}</span>
+            </div>
+          </div>
+        )}
 
         {/* Search */}
         <div className="relative mb-4">
@@ -223,89 +232,6 @@ const ConversationsList = ({
             className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white shadow-sm"
           />
         </div>
-
-        {/* Filters and Sort */}
-        {/* <div className="flex items-center justify-between mb-4 space-x-2">
-          <div className="relative">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setFilterOpen(!filterOpen);
-                setSortOpen(false);
-              }}
-              className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm"
-            >
-              <Filter size={14} />
-              <span>Filters</span>
-              <ChevronDown
-                size={14}
-                className={`transition-transform ${
-                  filterOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {filterOpen && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20">
-                <div className="p-2">
-                  {filterOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded-lg transition-colors"
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setSortOpen(!sortOpen);
-                setFilterOpen(false);
-              }}
-              className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors bg-white shadow-sm"
-            >
-              <span>
-                {sortOptions.find((opt) => opt.value === sortBy)?.label ||
-                  "Sort"}
-              </span>
-              <ChevronDown
-                size={14}
-                className={`transition-transform ${
-                  sortOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {sortOpen && (
-              <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20">
-                <div className="p-2">
-                  {sortOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setSortBy(option.value);
-                        setSortOpen(false);
-                      }}
-                      className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors ${
-                        sortBy === option.value
-                          ? "bg-blue-50 text-blue-700 font-medium"
-                          : "hover:bg-gray-100"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div> */}
 
         {/* Tabs */}
         <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
