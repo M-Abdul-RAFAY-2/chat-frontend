@@ -17,6 +17,7 @@ const IntegrationsForm = () => {
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingIntegration, setEditingIntegration] = useState<Integration | null>(null);
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error', message: string} | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     type: "",

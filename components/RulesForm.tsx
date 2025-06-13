@@ -19,6 +19,7 @@ const RulesForm = () => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingRule, setEditingRule] = useState<Rule | null>(null);
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error', message: string} | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     trigger: "",

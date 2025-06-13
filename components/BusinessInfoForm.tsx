@@ -21,6 +21,8 @@ const BusinessInfoForm = () => {
   const [businesses, setBusinesses] = useState<BusinessInfo[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingBusiness, setEditingBusiness] = useState<BusinessInfo | null>(null);
+  const [showIframeCode, setShowIframeCode] = useState(false);
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error', message: string} | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     website: "",
@@ -55,6 +57,7 @@ const BusinessInfoForm = () => {
           : business
       );
       saveBusinesses(updatedBusinesses);
+      setFlashMessage({type: 'success', message: 'Business information updated successfully!'});
     } else {
       // Add new business
       const newBusiness: BusinessInfo = {
@@ -64,9 +67,14 @@ const BusinessInfoForm = () => {
         updatedAt: new Date().toISOString(),
       };
       saveBusinesses([...businesses, newBusiness]);
+      setFlashMessage({type: 'success', message: 'Business information added successfully!'});
+      setShowIframeCode(true);
     }
 
     resetForm();
+    
+    // Hide flash message after 3 seconds
+    setTimeout(() => setFlashMessage(null), 3000);
   };
 
   const resetForm = () => {
@@ -98,17 +106,51 @@ const BusinessInfoForm = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this business info?")) {
-      const updatedBusinesses = businesses.filter(business => business.id !== id);
-      saveBusinesses(updatedBusinesses);
-    }
+    const updatedBusinesses = businesses.filter(business => business.id !== id);
+    saveBusinesses(updatedBusinesses);
+    setFlashMessage({type: 'success', message: 'Business information deleted successfully!'});
+    
+    // Hide flash message after 3 seconds
+    setTimeout(() => setFlashMessage(null), 3000);
   };
+
+  const iframeCode = `<iframe
+      src="https://d6ca-2400-adc5-12d-9100-6173-840d-487c-acec.ngrok-free.app/"
+      style="
+        position: fixed;
+        bottom: 1px;
+        right: 24px;
+        width: 350px;
+        height: 500px;
+        border: none;
+        background: transparent;
+        z-index: 9999;
+      "
+      allowtransparency="true"
+    ></iframe>`;
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-      <ChatSupportWidget />
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div className="flex items-center space-x-3 mb-4 sm:mb-0">
+      {/* Flash Message */}
+      {flashMessage && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          flashMessage.type === 'success' 
+            ? 'bg-green-50 border border-green-200 text-green-800' 
+            : 'bg-red-50 border border-red-200 text-red-800'
+        }`}>
+          <div className="flex items-center space-x-2">
+            <span>{flashMessage.message}</span>
+            <button 
+              onClick={() => setFlashMessage(null)}
+              className="text-current hover:opacity-70"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-3">
           <Building2 className="text-blue-600" size={24} />
           <h1 className="text-2xl font-bold text-gray-900">Business Information</h1>
         </div>
@@ -123,8 +165,17 @@ const BusinessInfoForm = () => {
 
       {/* Form Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              resetForm();
+            }
+          }}
+        >
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="p-6">
               <h2 className="text-xl font-semibold mb-4">
                 {editingBusiness ? "Edit Business Info" : "Add Business Info"}
@@ -251,6 +302,46 @@ const BusinessInfoForm = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Iframe Code Modal */}
+      {showIframeCode && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowIframeCode(false);
+            }
+          }}
+        >
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">Widget Code</h2>
+            <p className="text-gray-600 mb-4">
+              Copy this code and paste it into your website's HTML to add the chat widget:
+            </p>
+            <div className="bg-gray-100 p-4 rounded-lg mb-4">
+              <pre className="text-sm text-gray-800 whitespace-pre-wrap break-all">
+                {iframeCode}
+              </pre>
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => navigator.clipboard.writeText(iframeCode)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Copy Code
+              </button>
+              <button
+                onClick={() => setShowIframeCode(false)}
+                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

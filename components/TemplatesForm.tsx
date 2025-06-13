@@ -17,6 +17,7 @@ const TemplatesForm = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error', message: string} | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     content: "",

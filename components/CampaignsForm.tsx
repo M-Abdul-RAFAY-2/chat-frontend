@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Save, Plus, Edit, Trash2, Megaphone, Calendar, Users } from "lucide-react";
 
 interface Campaign {
@@ -28,6 +28,7 @@ const CampaignsForm = () => {
     message: "",
     targetAudience: "",
   });
+  const [flashMessage, setFlashMessage] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
   useEffect(() => {
     const savedCampaigns = localStorage.getItem("campaigns");
@@ -51,6 +52,7 @@ const CampaignsForm = () => {
           : campaign
       );
       saveCampaigns(updatedCampaigns);
+      setFlashMessage({ type: 'success', message: 'Campaign updated successfully!' });
     } else {
       const newCampaign: Campaign = {
         id: Date.now().toString(),
@@ -59,8 +61,10 @@ const CampaignsForm = () => {
         updatedAt: new Date().toISOString(),
       };
       saveCampaigns([...campaigns, newCampaign]);
+      setFlashMessage({ type: 'success', message: 'Campaign created successfully!' });
     }
 
+    setTimeout(() => setFlashMessage(null), 3000);
     resetForm();
   };
 
@@ -93,10 +97,10 @@ const CampaignsForm = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this campaign?")) {
-      const updatedCampaigns = campaigns.filter(campaign => campaign.id !== id);
-      saveCampaigns(updatedCampaigns);
-    }
+    const updatedCampaigns = campaigns.filter(campaign => campaign.id !== id);
+    saveCampaigns(updatedCampaigns);
+    setFlashMessage({type: 'success', message: 'Campaign deleted successfully!'});
+    setTimeout(() => setFlashMessage(null), 3000);
   };
 
   const getStatusColor = (status: Campaign["status"]) => {
@@ -122,6 +126,24 @@ const CampaignsForm = () => {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      {/* Flash Message */}
+      {flashMessage && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          flashMessage.type === 'success' 
+            ? 'bg-green-50 border border-green-200 text-green-800' 
+            : 'bg-red-50 border border-red-200 text-red-800'
+        }`}>
+          <div className="flex items-center space-x-2">
+            <span>{flashMessage.message}</span>
+            <button 
+              onClick={() => setFlashMessage(null)}
+              className="text-current hover:opacity-70"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div className="flex items-center space-x-3 mb-4 sm:mb-0">
           <Megaphone className="text-blue-600" size={24} />

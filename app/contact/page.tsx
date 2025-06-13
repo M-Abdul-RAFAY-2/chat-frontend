@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { MessageCircle, Mail, Phone, MapPin, Send, Clock, Users, Headphones } from "lucide-react";
+import ChatSupportWidget from "../../components/ChatSupportWidget";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [flashMessage, setFlashMessage] = useState<{type: 'success' | 'error', message: string} | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,14 +18,34 @@ export default function ContactPage() {
     // Simulate form submission
     setTimeout(() => {
       setLoading(false);
-      setSuccess(true);
       setForm({ name: "", email: "", subject: "", message: "" });
-      setTimeout(() => setSuccess(false), 3000);
+      setFlashMessage({type: 'success', message: 'Message sent successfully! We\'ll get back to you soon.'});
+      setTimeout(() => setFlashMessage(null), 3000);
     }, 1000);
   };
 
   return (
     <div className="min-h-screen bg-white">
+      <ChatSupportWidget />
+      
+      {/* Flash Message */}
+      {flashMessage && (
+        <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
+          flashMessage.type === 'success' 
+            ? 'bg-green-50 border border-green-200 text-green-800' 
+            : 'bg-red-50 border border-red-200 text-red-800'
+        }`}>
+          <div className="flex items-center space-x-2">
+            <span>{flashMessage.message}</span>
+            <button 
+              onClick={() => setFlashMessage(null)}
+              className="text-current hover:opacity-70"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -143,12 +165,6 @@ export default function ContactPage() {
             <div className="lg:col-span-2">
               <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-
-                {success && (
-                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-green-800 font-medium">Message sent successfully! We'll get back to you soon.</p>
-                  </div>
-                )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-6">
