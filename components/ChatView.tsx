@@ -113,7 +113,7 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
                 }`}
               >
                 <p className="text-sm leading-relaxed break-words">
-                  {msg.content}
+                  {msg.content || ""}
                 </p>
               </div>
               <div className="flex items-center space-x-2 mt-1">
@@ -128,7 +128,7 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
                             .join(""))}
                   </span>
                 </div>
-                <span className="text-xs text-gray-500">{msg.time}</span>
+                <span className="text-xs text-gray-500">{msg.time || ""}</span>
               </div>
             </div>
           </div>

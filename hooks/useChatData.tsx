@@ -38,8 +38,35 @@ export function useChatData(): ChatDataContext {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setConversations(chatData.conversations);
-    setLoading(false);
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:3001/api/v1/conversations", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Transform backend data to frontend shape
+        const mapped = data.map((conv: any) => ({
+          id: conv._id,
+          name: conv.customerId?.name || "Unknown",
+          avatar:
+            conv.customerId?.name
+              ?.split(" ")
+              .map((n: string) => n[0])
+              .join("")
+              .toUpperCase() || "U",
+          time: conv.updatedAt || "",
+          lastMessage: conv.lastMessage || "",
+          status: conv.status || "",
+          statusColor: conv.status === "NEW LEAD" ? "bg-orange-500" : "",
+          unread: false,
+          location: conv.customerId?.location || "",
+          messages: [], // You can fetch messages separately if needed
+        }));
+        console.log("Mapped conversations:", mapped);
+        setConversations(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const addMessage = useCallback((conversationId: number, message: Message) => {

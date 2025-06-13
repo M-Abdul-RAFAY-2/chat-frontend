@@ -104,19 +104,15 @@ const ConversationsList = ({
       .toUpperCase();
   };
 
-  const getAvatarColor = (name: string) => {
-    const colors = [
-      "bg-blue-500",
-      "bg-green-500",
-      "bg-purple-500",
-      "bg-pink-500",
-      "bg-indigo-500",
-      "bg-yellow-500",
-      "bg-red-500",
-      "bg-teal-500",
-    ];
-    const index = name.charCodeAt(0) % colors.length;
-    return colors[index];
+  const getAvatarColor = (name?: string) => {
+    if (!name || typeof name !== "string" || name.length === 0) return "#ccc";
+    // Example color logic:
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = `hsl(${hash % 360}, 70%, 60%)`;
+    return color;
   };
 
   const handleConversationClick = (conversation: Conversation) => {
@@ -360,78 +356,80 @@ const ConversationsList = ({
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
-            {filteredConversations.map((conversation) => (
-              <div
-                key={conversation.id}
-                onClick={() => handleConversationClick(conversation)}
-                className={`p-4 cursor-pointer hover:bg-gray-50 transition-all duration-200 relative ${
-                  selectedConversation?.id === conversation.id
-                    ? "bg-blue-50 border-r-4 border-r-blue-500"
-                    : ""
-                }`}
-              >
-                <div className="flex items-start space-x-3">
-                  <div className="relative flex-shrink-0">
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center ${getAvatarColor(
-                        conversation.name
-                      )} shadow-sm`}
-                    >
-                      <span className="text-sm font-semibold text-white">
-                        {getInitials(conversation.name)}
-                      </span>
+            {filteredConversations
+              .filter((conv) => conv && conv.id)
+              .map((conversation) => (
+                <div
+                  key={conversation.id}
+                  onClick={() => handleConversationClick(conversation)}
+                  className={`p-4 cursor-pointer hover:bg-gray-50 transition-all duration-200 relative ${
+                    selectedConversation?.id === conversation.id
+                      ? "bg-blue-50 border-r-4 border-r-blue-500"
+                      : ""
+                  }`}
+                >
+                  <div className="flex items-start space-x-3">
+                    <div className="relative flex-shrink-0">
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center ${getAvatarColor(
+                          conversation.name
+                        )} shadow-sm`}
+                      >
+                        <span className="text-sm font-semibold text-white">
+                          {getInitials(conversation.name)}
+                        </span>
+                      </div>
+                      {conversation.unread && (
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white animate-pulse"></div>
+                      )}
                     </div>
-                    {conversation.unread && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full border-2 border-white animate-pulse"></div>
-                    )}
-                  </div>
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3
-                        className={`font-semibold truncate ${
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3
+                          className={`font-semibold truncate ${
+                            conversation.unread
+                              ? "text-gray-900"
+                              : "text-gray-800"
+                          }`}
+                        >
+                          {conversation.name || "Unknown"}
+                        </h3>
+                        <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
+                          {conversation.time}
+                        </span>
+                      </div>
+
+                      <p
+                        className={`text-sm mb-3 line-clamp-2 leading-relaxed ${
                           conversation.unread
-                            ? "text-gray-900"
-                            : "text-gray-800"
+                            ? "text-gray-700 font-medium"
+                            : "text-gray-600"
                         }`}
                       >
-                        {conversation.name}
-                      </h3>
-                      <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
-                        {conversation.time}
-                      </span>
-                    </div>
+                        {conversation.lastMessage}
+                      </p>
 
-                    <p
-                      className={`text-sm mb-3 line-clamp-2 leading-relaxed ${
-                        conversation.unread
-                          ? "text-gray-700 font-medium"
-                          : "text-gray-600"
-                      }`}
-                    >
-                      {conversation.lastMessage}
-                    </p>
+                      <div className="flex items-center justify-between">
+                        {conversation.status && (
+                          <span
+                            className={`inline-block px-2 py-1 text-xs font-medium text-white rounded-full ${conversation.statusColor}`}
+                          >
+                            {conversation.status}
+                          </span>
+                        )}
 
-                    <div className="flex items-center justify-between">
-                      {conversation.status && (
-                        <span
-                          className={`inline-block px-2 py-1 text-xs font-medium text-white rounded-full ${conversation.statusColor}`}
-                        >
-                          {conversation.status}
-                        </span>
-                      )}
-
-                      {conversation.unread && (
-                        <div className="flex items-center space-x-1 text-blue-600">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                          <span className="text-xs font-medium">New</span>
-                        </div>
-                      )}
+                        {conversation.unread && (
+                          <div className="flex items-center space-x-1 text-blue-600">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span className="text-xs font-medium">New</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
       </div>
