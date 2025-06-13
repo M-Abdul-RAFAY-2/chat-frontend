@@ -35,7 +35,12 @@ const Navbar = ({ activeTab, onTabChange, onLogout }: NavbarProps) => {
     <nav className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-8">
-          <div className="text-xl font-bold text-blue-600">Podium Chat</div>
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            Podium Chat
+          </button>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-1">

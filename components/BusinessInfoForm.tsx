@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, Building2 } from "lucide-react";
@@ -48,7 +47,7 @@ const BusinessInfoForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (editingBusiness) {
       // Update existing business
       const updatedBusinesses = businesses.map(business =>
@@ -72,7 +71,7 @@ const BusinessInfoForm = () => {
     }
 
     resetForm();
-    
+
     // Hide flash message after 3 seconds
     setTimeout(() => setFlashMessage(null), 3000);
   };
@@ -109,7 +108,7 @@ const BusinessInfoForm = () => {
     const updatedBusinesses = businesses.filter(business => business.id !== id);
     saveBusinesses(updatedBusinesses);
     setFlashMessage({type: 'success', message: 'Business information deleted successfully!'});
-    
+
     // Hide flash message after 3 seconds
     setTimeout(() => setFlashMessage(null), 3000);
   };
@@ -150,8 +149,8 @@ const BusinessInfoForm = () => {
         </div>
       )}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-3">
-          <Building2 className="text-blue-600" size={24} />
+        <div className="flex items-center">
+          <Building2 className="mr-3 text-blue-600" size={28} />
           <h1 className="text-2xl font-bold text-gray-900">Business Information</h1>
         </div>
         <button
@@ -180,7 +179,7 @@ const BusinessInfoForm = () => {
               <h2 className="text-xl font-semibold mb-4">
                 {editingBusiness ? "Edit Business Info" : "Add Business Info"}
               </h2>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -368,7 +367,7 @@ const BusinessInfoForm = () => {
                 </button>
               </div>
             </div>
-            
+
             {business.website && (
               <p className="text-sm text-blue-600 mb-2 truncate">
                 <a href={business.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
@@ -376,11 +375,11 @@ const BusinessInfoForm = () => {
                 </a>
               </p>
             )}
-            
+
             {business.description && (
               <p className="text-sm text-gray-600 mb-2 line-clamp-2">{business.description}</p>
             )}
-            
+
             <div className="space-y-1 text-xs text-gray-500">
               {business.email && <p>📧 {business.email}</p>}
               {business.phone && <p>📱 {business.phone}</p>}
