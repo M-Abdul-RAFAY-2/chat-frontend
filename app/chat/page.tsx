@@ -94,14 +94,14 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">
+    <div className="h-screen flex flex-col bg-gray-50">
       <Navbar
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onLogout={handleLogout}
       />
       
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {renderContent()}
       </div>
     </div>

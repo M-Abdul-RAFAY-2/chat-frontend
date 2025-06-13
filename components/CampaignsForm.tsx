@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, Megaphone, Calendar, Users } from "lucide-react";
@@ -44,7 +43,7 @@ const CampaignsForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (editingCampaign) {
       const updatedCampaigns = campaigns.map(campaign =>
         campaign.id === editingCampaign.id
@@ -145,11 +144,11 @@ const CampaignsForm = () => {
               <h2 className="text-xl font-semibold mb-4">
                 {editingCampaign ? "Edit Campaign" : "Create Campaign"}
               </h2>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Campaign Name *
                     </label>
                     <input
@@ -157,31 +156,32 @@ const CampaignsForm = () => {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="Enter campaign name"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Schedule Date
+                    <label className="block text-sm font-medium text-black mb-1">
+                      Schedule Date *
                     </label>
                     <input
                       type="datetime-local"
+                      required
                       value={formData.scheduleDate}
                       onChange={(e) => setFormData({...formData, scheduleDate: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Status
                     </label>
                     <select
                       value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value as Campaign["status"]})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
                       <option value="draft">Draft</option>
                       <option value="scheduled">Scheduled</option>
@@ -192,13 +192,13 @@ const CampaignsForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Type
                     </label>
                     <select
                       value={formData.type}
                       onChange={(e) => setFormData({...formData, type: e.target.value as Campaign["type"]})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
                       <option value="sms">SMS</option>
                       <option value="email">Email</option>
@@ -208,34 +208,34 @@ const CampaignsForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Target Audience
                     </label>
                     <input
                       type="text"
                       value={formData.targetAudience}
                       onChange={(e) => setFormData({...formData, targetAudience: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="e.g., New customers, VIP clients"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Segment Criteria
                     </label>
                     <input
                       type="text"
                       value={formData.segmentCriteria}
                       onChange={(e) => setFormData({...formData, segmentCriteria: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                       placeholder="e.g., Age 25-45, Location: NYC"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-black mb-1">
                     Message Content *
                   </label>
                   <textarea
@@ -243,7 +243,7 @@ const CampaignsForm = () => {
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     placeholder="Enter your campaign message..."
                   />
                 </div>
@@ -299,23 +299,23 @@ const CampaignsForm = () => {
                 </button>
               </div>
             </div>
-            
+
             {campaign.scheduleDate && (
               <p className="text-sm text-gray-600 mb-2 flex items-center space-x-1">
                 <Calendar size={14} />
                 <span>{new Date(campaign.scheduleDate).toLocaleString()}</span>
               </p>
             )}
-            
+
             {campaign.targetAudience && (
               <p className="text-sm text-gray-600 mb-2 flex items-center space-x-1">
                 <Users size={14} />
                 <span>{campaign.targetAudience}</span>
               </p>
             )}
-            
+
             <p className="text-sm text-gray-700 line-clamp-3">{campaign.message}</p>
-            
+
             {campaign.segmentCriteria && (
               <p className="text-xs text-gray-500 mt-2">
                 <strong>Criteria:</strong> {campaign.segmentCriteria}

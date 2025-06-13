@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, FileText, Copy } from "lucide-react";
@@ -40,7 +39,7 @@ const TemplatesForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (editingTemplate) {
       const updatedTemplates = templates.map(template =>
         template.id === editingTemplate.id
@@ -137,7 +136,7 @@ const TemplatesForm = () => {
               <h2 className="text-xl font-semibold mb-4">
                 {editingTemplate ? "Edit Template" : "Create Template"}
               </h2>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -155,13 +154,14 @@ const TemplatesForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Type *
                     </label>
                     <select
+                      required
                       value={formData.type}
-                      onChange={(e) => setFormData({...formData, type: e.target.value as Template["type"]})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      onChange={(e) => setFormData({...formData, type: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
                       <option value="sms">SMS</option>
                       <option value="email">Email</option>
@@ -171,13 +171,13 @@ const TemplatesForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Status
                     </label>
                     <select
                       value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value as Template["status"]})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
@@ -206,7 +206,7 @@ const TemplatesForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-black mb-1">
                     Content *
                   </label>
                   <textarea
@@ -214,7 +214,7 @@ const TemplatesForm = () => {
                     value={formData.content}
                     onChange={(e) => setFormData({...formData, content: e.target.value})}
                     rows={6}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black placeholder-black"
                     placeholder="Enter your template content here. You can use variables like {name}, {company}, etc."
                   />
                   <p className="text-xs text-gray-500 mt-1">
@@ -281,17 +281,17 @@ const TemplatesForm = () => {
                 </button>
               </div>
             </div>
-            
+
             {template.category && (
               <p className="text-xs text-blue-600 mb-2 capitalize">
                 📂 {template.category}
               </p>
             )}
-            
+
             <div className="bg-gray-50 rounded-lg p-3 mb-3">
               <p className="text-sm text-gray-700 line-clamp-4">{template.content}</p>
             </div>
-            
+
             <p className="text-xs text-gray-500">
               Updated: {new Date(template.updatedAt).toLocaleDateString()}
             </p>

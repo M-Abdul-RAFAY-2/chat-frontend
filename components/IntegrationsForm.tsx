@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, Plug, CheckCircle, AlertCircle } from "lucide-react";
@@ -51,7 +50,7 @@ const IntegrationsForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (editingIntegration) {
       const updatedIntegrations = integrations.map(integration =>
         integration.id === editingIntegration.id
@@ -155,7 +154,7 @@ const IntegrationsForm = () => {
               <h2 className="text-xl font-semibold mb-4">
                 {editingIntegration ? "Edit Integration" : "Add Integration"}
               </h2>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -173,84 +172,39 @@ const IntegrationsForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Type *
                     </label>
                     <select
                       required
                       value={formData.type}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData, 
-                          type: e.target.value,
-                          configuration: {} // Reset configuration when type changes
-                        });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      onChange={(e) => setFormData({...formData, type: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
-                      <option value="">Select Type</option>
-                      {integrationTypes.map(type => (
-                        <option key={type.value} value={type.value}>
-                          {type.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Status
-                    </label>
-                    <select
-                      value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value as Integration["status"]})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                      <option value="disconnected">Disconnected</option>
-                      <option value="connected">Connected</option>
-                      <option value="error">Error</option>
+                      <option value="">Select Integration Type</option>
+                      <option value="whatsapp">WhatsApp Business</option>
+                      <option value="sms">SMS Gateway</option>
+                      <option value="email">Email Service</option>
+                      <option value="webhook">Webhook</option>
+                      <option value="crm">CRM System</option>
+                      <option value="analytics">Analytics</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
+                  <label className="block text-sm font-medium text-black mb-1">
+                    Configuration (JSON) *
                   </label>
                   <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Brief description of this integration"
+                    required
+                    value={formData.config}
+                    onChange={(e) => setFormData({...formData, config: e.target.value})}
+                    rows={6}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm text-black placeholder-black"
+                    placeholder='{"apiKey": "your-api-key", "endpoint": "https://api.example.com"}'
                   />
                 </div>
-
-                {/* Configuration Fields */}
-                {selectedType && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Configuration
-                    </label>
-                    <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
-                      {selectedType.fields.map(field => (
-                        <div key={field}>
-                          <label className="block text-xs font-medium text-gray-600 mb-1">
-                            {field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                            {field.includes('password') || field.includes('secret') || field.includes('token') ? ' *' : ''}
-                          </label>
-                          <input
-                            type={field.includes('password') || field.includes('secret') || field.includes('token') ? 'password' : 'text'}
-                            value={formData.configuration[field] || ''}
-                            onChange={(e) => handleConfigurationChange(field, e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                            placeholder={`Enter ${field.replace(/_/g, ' ')}`}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4">
                   <button
@@ -303,15 +257,15 @@ const IntegrationsForm = () => {
                 </button>
               </div>
             </div>
-            
+
             <p className="text-sm text-blue-600 mb-2 capitalize">
               🔌 {integration.type.replace(/[-_]/g, ' ')}
             </p>
-            
+
             {integration.description && (
               <p className="text-sm text-gray-600 mb-3 line-clamp-2">{integration.description}</p>
             )}
-            
+
             <div className="text-xs text-gray-500">
               <p>Updated: {new Date(integration.updatedAt).toLocaleDateString()}</p>
               {Object.keys(integration.configuration).length > 0 && (

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, Settings, Play } from "lucide-react";
@@ -44,7 +43,7 @@ const RulesForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (editingRule) {
       const updatedRules = rules.map(rule =>
         rule.id === editingRule.id
@@ -142,11 +141,11 @@ const RulesForm = () => {
               <h2 className="text-xl font-semibold mb-4">
                 {editingRule ? "Edit Rule" : "Create Rule"}
               </h2>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Rule Name *
                     </label>
                     <input
@@ -160,13 +159,13 @@ const RulesForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Status
                     </label>
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({...formData, status: e.target.value as Rule["status"]})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
@@ -174,28 +173,25 @@ const RulesForm = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Trigger Event *
+                    <label className="block text-sm font-medium text-black mb-1">
+                      Trigger *
                     </label>
                     <select
                       required
                       value={formData.trigger}
                       onChange={(e) => setFormData({...formData, trigger: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                     >
                       <option value="">Select Trigger</option>
-                      <option value="new_message">New Message Received</option>
-                      <option value="new_conversation">New Conversation Started</option>
+                      <option value="message_received">Message Received</option>
                       <option value="keyword_detected">Keyword Detected</option>
-                      <option value="business_hours">Business Hours</option>
-                      <option value="customer_inactive">Customer Inactive</option>
-                      <option value="payment_received">Payment Received</option>
-                      <option value="form_submitted">Form Submitted</option>
+                      <option value="time_based">Time Based</option>
+                      <option value="user_joined">User Joined</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-black mb-1">
                       Priority (1-10)
                     </label>
                     <input
@@ -210,30 +206,45 @@ const RulesForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Condition *
+                  <label className="block text-sm font-medium text-black mb-1">
+                    Condition
                   </label>
-                  <textarea
-                    required
+                  <input
+                    type="text"
                     value={formData.condition}
                     onChange={(e) => setFormData({...formData, condition: e.target.value})}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Message contains 'pricing' OR customer is first-time visitor"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black placeholder-black"
+                    placeholder="e.g., contains 'help', after 10 minutes"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-black mb-1">
                     Action *
                   </label>
-                  <textarea
+                  <select
                     required
                     value={formData.action}
                     onChange={(e) => setFormData({...formData, action: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  >
+                    <option value="">Select Action</option>
+                    <option value="send_message">Send Message</option>
+                    <option value="add_tag">Add Tag</option>
+                    <option value="close_conversation">Close Conversation</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-black mb-1">
+                    Auto Response (if applicable)
+                  </label>
+                  <textarea
+                    value={formData.response}
+                    onChange={(e) => setFormData({...formData, response: e.target.value})}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Send welcome template, Assign to sales team, Add tag 'interested'"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black placeholder-black"
+                    placeholder="Enter response message..."
                   />
                 </div>
 
@@ -287,11 +298,11 @@ const RulesForm = () => {
                     {getPriorityLabel(rule.priority)}
                   </span>
                 </div>
-                
+
                 {rule.description && (
                   <p className="text-sm text-gray-600 mb-3">{rule.description}</p>
                 )}
-                
+
                 <div className="grid md:grid-cols-3 gap-4 text-sm">
                   <div>
                     <span className="font-medium text-gray-700">Trigger:</span>
@@ -307,7 +318,7 @@ const RulesForm = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2 mt-4 lg:mt-0">
                 <button
                   onClick={() => handleEdit(rule)}
