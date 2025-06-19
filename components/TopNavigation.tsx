@@ -1,8 +1,15 @@
 "use client";
 
-import { Unplug, Plus, User, Menu, X, CircleDollarSign } from "lucide-react";
+import { Unplug, Plus, Menu, X, CircleDollarSign } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import {
+  UserButton,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+} from "@clerk/nextjs";
 
 interface TopNavigationProps {
   onNavChange?: (id: string) => void;
@@ -113,9 +120,13 @@ export default function TopNavigation({
 
           {/* Profile */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-              <User size={16} />
-            </div>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
           </div>
           {/* Mobile Menu Button */}
           <button

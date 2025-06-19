@@ -8,7 +8,7 @@ import {
   Paperclip,
   Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface ChatInterfaceProps {
@@ -64,19 +64,39 @@ export default function ChatInterface({
     },
   ]);
   const [loadingAI, setLoadingAI] = useState(false);
+  const [attachedFile, setAttachedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const customerName = "Will Pantente";
   const customerLocation = "Venture Auto ...";
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage.trim()) {
+    let fileInfo = null;
+    if (attachedFile) {
+      const formData = new FormData();
+      formData.append("file", attachedFile);
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        fileInfo = await res.json();
+      } catch (err) {
+        fileInfo = { name: attachedFile.name, error: "Upload failed" };
+      }
+    }
+    if (newMessage.trim() || fileInfo) {
       setMessages((prev) => [
         ...prev,
         {
           id: (prev.length + 1).toString(),
           sender: "agent",
-          content: newMessage,
+          content:
+            newMessage +
+            (fileInfo
+              ? ` [File: ${fileInfo.name || fileInfo.error || "Unknown"}]`
+              : ""),
           timestamp: new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
@@ -85,6 +105,7 @@ export default function ChatInterface({
         },
       ]);
       setNewMessage("");
+      setAttachedFile(null);
     }
   };
 
@@ -106,6 +127,16 @@ export default function ChatInterface({
       setNewMessage("Sorry, failed to generate AI message.");
     } finally {
       setLoadingAI(false);
+    }
+  };
+
+  const handleAttachClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setAttachedFile(e.target.files[0]);
     }
   };
 
@@ -208,9 +239,21 @@ export default function ChatInterface({
           <button
             type="button"
             className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+            onClick={handleAttachClick}
           >
             <Paperclip size={20} />
           </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+          {attachedFile && (
+            <span className="ml-2 text-xs text-gray-600">
+              {attachedFile.name}
+            </span>
+          )}
 
           <div className="flex-1 relative">
             <input

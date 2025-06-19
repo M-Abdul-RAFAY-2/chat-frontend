@@ -9,13 +9,11 @@ import {
   CheckCircle,
 } from "lucide-react";
 import ChatSupportWidget from "../components/ChatSupportWidget";
-import Header from "../components/Header";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <ChatSupportWidget />
-      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-12 sm:py-16 lg:py-20">
