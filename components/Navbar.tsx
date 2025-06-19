@@ -1,136 +1,119 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { MessageCircle, Menu, X } from "lucide-react";
 import {
-  Building2,
-  Megaphone,
-  FileText,
-  Settings,
-  Plug,
-  User,
-  LogOut,
-  Menu,
-  X,
-  MessageCircle,
-  CodeXml,
-} from "lucide-react";
-import {
-  UserButton,
-  SignedIn,
-  SignedOut,
   SignInButton,
   SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
 } from "@clerk/nextjs";
 
-interface NavbarProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
-  onLogout: () => void;
+interface HeaderProps {
+  showAuthButtons?: boolean;
 }
 
-const Navbar = ({ activeTab, onTabChange, onLogout }: NavbarProps) => {
+export default function Header({ showAuthButtons = true }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { id: "chat", label: "Chat", icon: MessageCircle },
-    { id: "business", label: "Business Info", icon: Building2 },
-    { id: "campaigns", label: "Campaigns", icon: Megaphone },
-    { id: "templates", label: "Templates", icon: FileText },
-    // { id: "rules", label: "Rules", icon: Settings },
-    // { id: "integrations", label: "Integrations", icon: Plug },
-    { id: "widget", label: "Widget", icon: CodeXml },
-  ];
-
   return (
-    <nav className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 shadow-sm">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-8">
-          <button
-            onClick={() => (window.location.href = "/")}
-            className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors flex items-center space-x-2"
-          >
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <MessageCircle size={20} className="text-white" />
             </div>
-            <span>Podium Chat</span>
-          </button>
+            <span className="text-xl font-bold text-gray-900">Podium Chat</span>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onTabChange(item.id)}
-                  className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
-                    activeTab === item.id
-                      ? "bg-blue-50 text-blue-700 border border-blue-200"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link
+              href="/#features"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Features
+            </Link>
+            <Link
+              href="/about"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              About
+            </Link>
+            <Link
+              href="/contact"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Contact
+            </Link>
+          </nav>
 
-        {/* Right side items */}
-        <div className="flex items-center space-x-4">
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <SignInButton />
-            <SignUpButton />
-          </SignedOut>
+          {/* Desktop Auth Buttons with Clerk */}
+          {showAuthButtons && (
+            <div className="hidden text-black md:flex items-center space-x-4">
+              <SignedOut>
+                <SignInButton />
+                <SignUpButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+          )}
+
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      {mobileMenuOpen && (
-        <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
-          <div className="space-y-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    onTabChange(item.id);
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeTab === item.id
-                      ? "bg-blue-50 text-blue-700 border border-blue-200"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
-                >
-                  <Icon size={16} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-            <button
-              onClick={onLogout}
-              className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200 border-t border-gray-200 mt-4 pt-4"
-            >
-              <LogOut size={16} />
-              <span>Logout</span>
-            </button>
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 py-4">
+            <div className="flex flex-col space-y-4">
+              <Link
+                href="/#features"
+                className="text-gray-600 hover:text-gray-900 transition-colors px-2 py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-600 hover:text-gray-900 transition-colors px-2 py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-600 hover:text-gray-900 transition-colors px-2 py-1"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
+
+              {showAuthButtons && (
+                <div className="flex flex-col space-y-3 pt-4 border-t border-gray-200">
+                  <SignedOut>
+                    <SignInButton />
+                    <SignUpButton />
+                  </SignedOut>
+                  <SignedIn>
+                    <UserButton />
+                  </SignedIn>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </nav>
+        )}
+      </div>
+    </header>
   );
-};
-
-export default Navbar;
+}

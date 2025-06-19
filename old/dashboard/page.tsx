@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Navbar from "../../components/Navbar";
+import Navbar from "../oldComponents/Navbar";
 import BusinessInfoForm from "../oldComponents/BusinessInfoForm";
 import CampaignsForm from "../oldComponents/CampaignsForm";
 import TemplatesForm from "../oldComponents/TemplatesForm";

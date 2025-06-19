@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, AlertCircle, CheckCircle } from "lucide-react";
-import Header from "../../components/Header";
+import Header from "../../components/Navbar";
 
 export default function RegisterPage() {
   const router = useRouter();

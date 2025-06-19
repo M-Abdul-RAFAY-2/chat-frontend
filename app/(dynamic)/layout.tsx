@@ -1,4 +1,4 @@
-import Header from "@/components/Navbar";
+import TopNavigation from "@/components/TopNavigation";
 
 export default function RootLayout({
   children,
@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
+        <TopNavigation />
         {children}
       </body>
     </html>
