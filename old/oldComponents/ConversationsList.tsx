@@ -10,7 +10,7 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
-import { useChatData, Conversation } from "../hooks/useChatData";
+import { useChatData, Conversation } from "../../hooks/useChatData";
 
 interface ConversationsListProps {
   onSelectConversation: (conversation: Conversation) => void;
@@ -30,7 +30,8 @@ const ConversationsList = ({
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("newest");
   const [sortOpen, setSortOpen] = useState(false);
-  const { conversations, loading, error, markAsRead, refreshConversations } = useChatData();
+  const { conversations, loading, error, markAsRead, refreshConversations } =
+    useChatData();
 
   // Filter conversations based on active filter from sidebar
   const getFilteredConversations = () => {
@@ -107,15 +108,22 @@ const ConversationsList = ({
   };
 
   const getAvatarColor = (name?: string) => {
-    if (!name || typeof name !== "string" || name.length === 0) return "bg-gray-500";
+    if (!name || typeof name !== "string" || name.length === 0)
+      return "bg-gray-500";
     // Generate consistent color based on name
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
       hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
     const colors = [
-      "bg-blue-500", "bg-green-500", "bg-purple-500", "bg-pink-500", 
-      "bg-indigo-500", "bg-red-500", "bg-yellow-500", "bg-teal-500"
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-indigo-500",
+      "bg-red-500",
+      "bg-yellow-500",
+      "bg-teal-500",
     ];
     return colors[Math.abs(hash) % colors.length];
   };
@@ -196,7 +204,8 @@ const ConversationsList = ({
               {getFilterTitle()}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              {filteredConversations.length} conversation{filteredConversations.length !== 1 ? 's' : ''}
+              {filteredConversations.length} conversation
+              {filteredConversations.length !== 1 ? "s" : ""}
             </p>
           </div>
           <button

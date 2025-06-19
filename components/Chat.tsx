@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ConversationsList from "./ConversationsList";
-import ChatView from "./ChatView";
+import ConversationsList from "../old/oldComponents/ConversationsList";
+import ChatView from "../old/oldComponents/ChatView";
 import { Conversation } from "../hooks/useChatData";
 
 const Chat = () => {

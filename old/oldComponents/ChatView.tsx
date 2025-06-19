@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, Send, AlertCircle, RefreshCw } from "lucide-react";
-import { Conversation, useChatData } from "../hooks/useChatData";
+import { Conversation, useChatData } from "../../hooks/useChatData";
 
 interface ChatViewProps {
   conversation: Conversation | null;
@@ -14,7 +14,8 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { addMessage, markAsRead, sendMessage, fetchMessages, error } = useChatData();
+  const { addMessage, markAsRead, sendMessage, fetchMessages, error } =
+    useChatData();
 
   useEffect(() => {
     if (conversation && conversation.unread) {
@@ -55,7 +56,7 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
     try {
       await sendMessage(conversation.id, messageContent);
     } catch (error) {
-      console.error('Failed to send message:', error);
+      console.error("Failed to send message:", error);
       // Restore message on error
       setMessage(messageContent);
     } finally {
@@ -109,11 +110,15 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
             {conversation.name}
           </h3>
           {conversation.location && (
-            <p className="text-xs text-gray-500 truncate">{conversation.location}</p>
+            <p className="text-xs text-gray-500 truncate">
+              {conversation.location}
+            </p>
           )}
         </div>
         {conversation.status && (
-          <span className={`px-2 py-1 text-xs font-medium text-white rounded-full ${conversation.statusColor}`}>
+          <span
+            className={`px-2 py-1 text-xs font-medium text-white rounded-full ${conversation.statusColor}`}
+          >
             {conversation.status}
           </span>
         )}
@@ -145,7 +150,9 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
                 <span className="text-xl">💬</span>
               </div>
               <p className="text-sm">No messages yet</p>
-              <p className="text-xs text-gray-400 mt-1">Start the conversation below</p>
+              <p className="text-xs text-gray-400 mt-1">
+                Start the conversation below
+              </p>
             </div>
           </div>
         ) : (
@@ -168,12 +175,18 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
                     </span>
                   </div>
                 ) : msg.isPayment ? (
-                  <div className={`inline-block px-4 py-3 rounded-xl border-2 border-dashed ${
-                    msg.sender === "agent" ? "border-blue-300 bg-blue-50" : "border-green-300 bg-green-50"
-                  }`}>
+                  <div
+                    className={`inline-block px-4 py-3 rounded-xl border-2 border-dashed ${
+                      msg.sender === "agent"
+                        ? "border-blue-300 bg-blue-50"
+                        : "border-green-300 bg-green-50"
+                    }`}
+                  >
                     <p className="font-semibold text-sm">{msg.content}</p>
                     {msg.subtitle && (
-                      <p className="text-xs text-gray-600 mt-1">{msg.subtitle}</p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        {msg.subtitle}
+                      </p>
                     )}
                   </div>
                 ) : (
@@ -189,11 +202,13 @@ const ChatView = ({ conversation, onBack }: ChatViewProps) => {
                     </p>
                   </div>
                 )}
-                
+
                 {!msg.isSystem && (
-                  <div className={`flex items-center space-x-2 mt-1 ${
-                    msg.sender === "agent" ? "justify-end" : "justify-start"
-                  }`}>
+                  <div
+                    className={`flex items-center space-x-2 mt-1 ${
+                      msg.sender === "agent" ? "justify-end" : "justify-start"
+                    }`}
+                  >
                     <div className="w-5 h-5 rounded-full flex items-center justify-center bg-gray-300">
                       <span className="text-xs font-medium text-white">
                         {msg.avatar || (msg.sender === "agent" ? "A" : "C")}
