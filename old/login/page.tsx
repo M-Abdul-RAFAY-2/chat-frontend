@@ -30,8 +30,8 @@ export default function LoginPage() {
       }
 
       // Save token and redirect
-      localStorage.setItem("token", data.token);
-      router.push("/dashboard");
+      // localStorage.setItem("token", data.token);
+      // router.push("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
       setError("Network error. Please check if the backend server is running.");

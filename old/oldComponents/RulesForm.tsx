@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, Settings, Play } from "lucide-react";
-import { rulesApi, Rule } from "../lib/api";
+import { rulesApi, Rule } from "../../lib/api";
 
 const RulesForm = () => {
   const [rules, setRules] = useState<Rule[]>([]);

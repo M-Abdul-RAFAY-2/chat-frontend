@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { widgetApi, WidgetData } from "../lib/api";
+import { widgetApi, WidgetData } from "../../lib/api";
 
 export default function ChatSupportWidget() {
   const [open, setOpen] = useState(false);

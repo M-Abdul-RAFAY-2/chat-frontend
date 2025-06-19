@@ -8,8 +8,8 @@ import {
   Star,
   CheckCircle,
 } from "lucide-react";
-import ChatSupportWidget from "../components/ChatSupportWidget";
-import Header from "../components/Header";
+import ChatSupportWidget from "@/components/ChatSupportWidgets";
+import Header from "@/components/Header";
 
 export default function Home() {
   return (

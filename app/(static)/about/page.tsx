@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MessageCircle, Users, Target, Award, ArrowRight } from "lucide-react";
-import ChatSupportWidget from "../../components/ChatSupportWidget";
-import Header from "../../components/Header";
+import ChatSupportWidget from "@/components/ChatSupportWidgets";
+import Header from "@/components/Header";
 
 export default function AboutPage() {
   return (

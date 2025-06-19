@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Save, Plus, Edit, Trash2, Building2 } from "lucide-react";
-import { businessInfoApi, BusinessInfo } from "../lib/api";
+import { businessInfoApi, BusinessInfo } from "../../lib/api";
 
 const BusinessInfoForm = () => {
   const [businesses, setBusinesses] = useState<BusinessInfo[]>([]);

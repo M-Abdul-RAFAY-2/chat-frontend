@@ -9,7 +9,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
-import { integrationsApi, Integration } from "../lib/api";
+import { integrationsApi, Integration } from "../../lib/api";
 
 const IntegrationsForm = () => {
   const [integrations, setIntegrations] = useState<Integration[]>([]);

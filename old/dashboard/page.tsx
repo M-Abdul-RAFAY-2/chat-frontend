@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
-import BusinessInfoForm from "../../components/BusinessInfoForm";
-import CampaignsForm from "../../components/CampaignsForm";
-import TemplatesForm from "../../components/TemplatesForm";
-import RulesForm from "../../components/RulesForm";
-import IntegrationsForm from "../../components/IntegrationsForm";
+import BusinessInfoForm from "../oldComponents/BusinessInfoForm";
+import CampaignsForm from "../oldComponents/CampaignsForm";
+import TemplatesForm from "../oldComponents/TemplatesForm";
+import RulesForm from "../oldComponents/RulesForm";
+import IntegrationsForm from "../oldComponents/IntegrationsForm";
 import WidgetCode from "../../components/WidgetCode";
 import Chat from "@/components/Chat";
 
@@ -15,8 +15,8 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("chat");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
+    // localStorage.removeItem("token");
+    // router.push("/login");
   };
 
   const renderContent = () => {
