@@ -9,6 +9,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { Button } from "./ui/button";
 
 interface HeaderProps {
   showAuthButtons?: boolean;
@@ -49,17 +50,29 @@ export default function Header({ showAuthButtons = true }: HeaderProps) {
             >
               Contact
             </Link>
+            <Link
+              href="/dashboard/inbox"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Dashboard
+            </Link>
           </nav>
 
           {/* Desktop Auth Buttons with Clerk */}
           {showAuthButtons && (
             <div className="hidden text-black md:flex items-center space-x-4">
               <SignedOut>
-                <SignInButton />
-                <SignUpButton />
+                <Button variant="outline">
+                  <SignInButton />
+                </Button>
+                <Button variant="outline">
+                  <SignUpButton />
+                </Button>
               </SignedOut>
               <SignedIn>
-                <UserButton />
+                <div className="ml-33">
+                  <UserButton />
+                </div>
               </SignedIn>
             </div>
           )}
