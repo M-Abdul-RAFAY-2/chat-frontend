@@ -13,7 +13,7 @@ export default function Inbox() {
   const [profileVisible, setProfileVisible] = useState(false);
 
   return (
-    <div className="flex flex-1 min-h-0 overflow-hidden">
+    <div className="flex h-full overflow-hidden">
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}

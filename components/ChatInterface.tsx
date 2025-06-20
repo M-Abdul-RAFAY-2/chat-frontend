@@ -149,7 +149,7 @@ export default function ChatInterface({
   return (
     <div className="flex flex-col bg-white flex-1 min-w-0 h-full">
       {/* Header - Fixed */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white sticky top-0 z-10">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white flex-shrink-0">
         <div className="flex items-center space-x-2 min-w-0">
           <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-medium flex-shrink-0 text-xs">
             WP
@@ -236,8 +236,8 @@ export default function ChatInterface({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Message Input - Fixed */}
-      <div className="px-2 py-2 border-t border-gray-200 bg-white sticky bottom-0 left-0 right-0 z-10">
+      {/* Message Input - Fixed at bottom */}
+      <div className="px-2 py-2 border-t border-gray-200 bg-white flex-shrink-0">
         <form
           onSubmit={handleSendMessage}
           className="flex items-center space-x-2"

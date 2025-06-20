@@ -82,7 +82,7 @@ export default function CustomerProfile({
   return (
     <div className="w-64 bg-white border-l border-gray-200 flex flex-col h-full min-w-0">
       {/* Header - Fixed */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white sticky top-0 z-10">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white flex-shrink-0">
         <div className="flex items-center space-x-2 min-w-0">
           <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-medium flex-shrink-0 text-xs">
             WP
@@ -103,7 +103,7 @@ export default function CustomerProfile({
       </div>
 
       {/* Recent Activity - Fixed */}
-      <div className="px-3 py-2 border-b border-gray-200 bg-white">
+      <div className="px-3 py-2 border-b border-gray-200 bg-white flex-shrink-0">
         <h3 className="text-xs font-medium text-gray-900 mb-2">
           RECENT ACTIVITY
         </h3>
@@ -148,7 +148,7 @@ export default function CustomerProfile({
       </div>
 
       {/* Action Buttons - Fixed */}
-      <div className="px-3 py-2 border-b border-gray-200 bg-white">
+      <div className="px-3 py-2 border-b border-gray-200 bg-white flex-shrink-0">
         <div className="grid grid-cols-4 gap-1">
           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg flex flex-col items-center transition-colors">
             <MessageSquare size={16} />
@@ -166,7 +166,7 @@ export default function CustomerProfile({
       </div>
 
       {/* Tabs - Fixed */}
-      <div className="flex border-b border-gray-200 bg-white sticky top-[120px] z-10">
+      <div className="flex border-b border-gray-200 bg-white flex-shrink-0">
         <button
           onClick={() => setActiveTab("details")}
           className={cn(
