@@ -8,7 +8,7 @@ import {
   Paperclip,
   Sparkles,
 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface ChatInterfaceProps {
@@ -66,9 +66,15 @@ export default function ChatInterface({
   const [loadingAI, setLoadingAI] = useState(false);
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const customerName = "Will Pantente";
   const customerLocation = "Venture Auto ...";
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,83 +147,82 @@ export default function ChatInterface({
   };
 
   return (
-    <div className="flex flex-col bg-white flex-1 min-w-0">
+    <div className="flex flex-col bg-white flex-1 min-w-0 h-full">
       {/* Header - Fixed */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0 z-10">
-        <div className="flex items-center space-x-3 min-w-0">
-          <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-medium flex-shrink-0">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-white sticky top-0 z-10">
+        <div className="flex items-center space-x-2 min-w-0">
+          <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-medium flex-shrink-0 text-xs">
             WP
           </div>
           <div className="min-w-0">
-            <h2 className="font-semibold text-gray-900 truncate">
+            <h2 className="font-semibold text-gray-900 truncate text-sm">
               {customerName}
             </h2>
-            <p className="text-sm text-gray-500 flex items-center">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></span>
+            <p className="text-xs text-gray-500 flex items-center">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-1 flex-shrink-0"></span>
               <span className="truncate">{customerLocation}</span>
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 flex-shrink-0">
-          <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">
-            <Phone size={20} />
+        <div className="flex items-center space-x-1 flex-shrink-0">
+          <button className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">
+            <Phone size={18} />
           </button>
-          <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">
-            <Video size={20} />
+          <button className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">
+            <Video size={18} />
           </button>
           <button
             onClick={onToggleProfile}
             className={cn(
-              "p-2 rounded-lg transition-colors",
+              "p-1.5 rounded-lg transition-colors",
               profileVisible
                 ? "bg-blue-100 text-blue-600"
                 : "text-gray-500 hover:bg-gray-100"
             )}
           >
-            <MoreHorizontal size={20} />
+            <MoreHorizontal size={18} />
           </button>
         </div>
       </div>
 
       {/* Messages - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-2 py-2 space-y-3">
         <div className="text-center">
-          <p className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full inline-block">
+          <p className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full inline-block">
             This is the beginning of your email conversation.
           </p>
-          <p className="text-xs text-gray-400 mt-1">Today at 10:42 AM</p>
+          <p className="text-[10px] text-gray-400 mt-0.5">Today at 10:42 AM</p>
         </div>
 
         {messages.map((message) => (
           <div
             key={message.id}
             className={cn(
-              "flex items-start space-x-3",
+              "flex items-start space-x-2",
               message.sender === "agent" && "flex-row-reverse space-x-reverse"
             )}
           >
             <div
               className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium text-white flex-shrink-0",
+                "w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium text-white flex-shrink-0",
                 message.sender === "customer" ? "bg-pink-500" : "bg-blue-500"
               )}
             >
               {message.avatar}
             </div>
-
             <div
               className={cn(
-                "max-w-xs lg:max-w-md px-4 py-2 rounded-2xl",
+                "max-w-xs lg:max-w-md px-3 py-1.5 rounded-2xl text-xs",
                 message.sender === "customer"
                   ? "bg-gray-100 text-gray-900"
                   : "bg-blue-500 text-white"
               )}
             >
-              <p className="text-sm">{message.content}</p>
+              <p className="text-xs">{message.content}</p>
               <p
                 className={cn(
-                  "text-xs mt-1",
+                  "text-[10px] mt-0.5",
                   message.sender === "customer"
                     ? "text-gray-500"
                     : "text-blue-100"
@@ -228,20 +233,21 @@ export default function ChatInterface({
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Message Input - Fixed */}
-      <div className="p-4 border-t border-gray-200 bg-white">
+      <div className="px-2 py-2 border-t border-gray-200 bg-white sticky bottom-0 left-0 right-0 z-10">
         <form
           onSubmit={handleSendMessage}
-          className="flex items-center space-x-3"
+          className="flex items-center space-x-2"
         >
           <button
             type="button"
-            className="p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+            className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
             onClick={handleAttachClick}
           >
-            <Paperclip size={20} />
+            <Paperclip size={18} />
           </button>
           <input
             type="file"
@@ -250,7 +256,7 @@ export default function ChatInterface({
             onChange={handleFileChange}
           />
           {attachedFile && (
-            <span className="ml-2 text-xs text-gray-600">
+            <span className="ml-1 text-[11px] text-gray-600">
               {attachedFile.name}
             </span>
           )}
@@ -261,21 +267,21 @@ export default function ChatInterface({
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-              className="w-full px-4 py-2 border text-black border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-20"
+              className="w-full px-3 py-1.5 border text-black border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-16 text-xs"
             />
 
             {/* AI Generate Button */}
             <button
               type="button"
               onClick={handleAIGenerate}
-              className="absolute right-12 top-1/2 transform -translate-y-1/2 p-1.5 text-purple-600 hover:bg-purple-50 rounded-full transition-colors"
+              className="absolute right-10 top-1/2 transform -translate-y-1/2 p-1 text-purple-600 hover:bg-purple-50 rounded-full transition-colors"
               title="Generate with AI"
               disabled={loadingAI}
             >
               {loadingAI ? (
                 <span className="animate-spin">🤖</span>
               ) : (
-                <Sparkles size={16} />
+                <Sparkles size={14} />
               )}
             </button>
 
@@ -290,7 +296,7 @@ export default function ChatInterface({
                   : "bg-gray-200 text-gray-400"
               )}
             >
-              <Send size={16} />
+              <Send size={14} />
             </button>
           </div>
         </form>
